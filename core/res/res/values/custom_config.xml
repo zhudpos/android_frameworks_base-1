@@ -38,4 +38,7 @@
     <!-- IME switcher -->
     <bool name="config_show_cmIMESwitcher">false</bool>
 
+    <!-- Screen recording -->
+    <bool name="config_enableScreenrecordChord">true</bool>
+
 </resources>
