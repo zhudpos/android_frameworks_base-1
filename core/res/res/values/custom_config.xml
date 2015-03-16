@@ -21,4 +21,8 @@
     <string-array name="config_disabledComponents" translatable="false">
     </string-array>
 
+    <!-- System update service -->
+    <string-array name="config_forceEnabledComponents" translatable="false">
+    </string-array>
+
 </resources>
