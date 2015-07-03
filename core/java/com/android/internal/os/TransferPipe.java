@@ -254,6 +254,25 @@ public final class TransferPipe implements Runnable, Closeable {
                 notifyAll();
                 return;
             }
+        } catch (NullPointerException e) {
+            synchronized (this) {
+                mFailure = e.toString();
+                notifyAll();
+                return;
+            }
+        } finally {
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch (IOException e) {
+            }
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+            }
         }
 
         synchronized (this) {
