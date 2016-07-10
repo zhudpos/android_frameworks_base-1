@@ -31,6 +31,9 @@
     <!-- Button brightness -->
     <integer name="config_buttonBrightnessSettingDefault">255</integer>
     <bool name="config_deviceHasVariableButtonBrightness">false</bool>
+	
+	<!-- Whether device has dash charging support -->
+    <bool name="config_hasDashCharger">false</bool>
 
     <!-- Kill app long press back -->
     <integer name="config_backKillTimeout">1000</integer>
