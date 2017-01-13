@@ -137,4 +137,10 @@
     <!-- Notification: Menu row: Snooze options: 1 hour option. [CHAR LIMIT=50]-->
     <string name="snooze_option_24_hour">24 hours</string>
 
+    <!-- SysUI Tuner -->
+    <string name="lockscreen_tuner_activity">Lockscreen shortcuts</string>
+
+    <!-- Ambient display and lift gesture Tile -->
+    <string name="quick_settings_doze_notifications_label">Ambient notifications</string>
+
 </resources>
