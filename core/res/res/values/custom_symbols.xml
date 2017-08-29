@@ -26,4 +26,8 @@
   <!-- USB drive persistent notification -->
   <java-symbol type="bool" name="config_persistUsbDriveNotification" />
 
+  <!-- Button brightness -->
+  <java-symbol type="integer" name="config_buttonBrightnessSettingDefault" />
+  <java-symbol type="bool" name="config_deviceHasVariableButtonBrightness" />
+
 </resources>
