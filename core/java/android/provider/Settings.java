@@ -3889,14 +3889,6 @@ public final class Settings {
         };
 
         /**
-         * Whether to use the MTP by default after connecting to PC
-         * @hide
-         */
-        public static final String MTP_DIRTY_HACK = "mtp_dirty_hack";
-        /** @hide */
-        public static final String MTP_DIRTY_HACK_SAVE = "mtp_dirty_hack_save";
-
-        /**
          * Setting to determine whether or not to show the battery percentage in the status bar.
          *    0 - Don't show percentage
          *    1 - Show percentage
@@ -3913,6 +3905,26 @@ public final class Settings {
          * it to PRIVATE_SETTINGS below. Also add a validator that can validate
          * the setting value. See an example above.
          */
+
+        /**
+         * Whether to use the MTP by default after connecting to PC
+         * @hide
+         */
+        public static final String MTP_DIRTY_HACK = "mtp_dirty_hack";
+        /** @hide */
+        public static final String MTP_DIRTY_HACK_SAVE = "mtp_dirty_hack_save";
+
+        /**
+         * Enable blocking wakelock
+         * @hide
+         */
+        public static final String WAKELOCK_BLOCKING_ENABLED = "wakelock_blocking_enabled";
+
+        /**
+         * List of wakelock blocks selected
+         * @hide
+         */
+        public static final String WAKELOCK_BLOCKING_LIST = "wakelock_blocking_list";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
