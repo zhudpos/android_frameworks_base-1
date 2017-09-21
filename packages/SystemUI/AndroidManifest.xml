@@ -199,13 +199,20 @@
     <uses-permission android:name="android.permission.REBOOT" />
     <uses-permission android:name="android.permission.RECOVERY" />
 
-    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
-
-    <!-- screenrecord -->
+    <!-- Screen record -->
     <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
 
     <!-- OmniJaws -->
     <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
+
+    <!-- DU permissions -->
+    <uses-permission android:name="android.permission.NAVIGATION_EDITOR" />
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
 
     <application
         android:name=".SystemUIApplication"
@@ -328,7 +335,7 @@
 
         <activity android:name=".tuner.NavBarActivity"
                   android:theme="@style/CustomTunerSettings"
-                  android:label="@string/nav_bar"
+                  android:label="@string/systemui_tuner_navbar_title"
                   android:process=":tuner"
                   android:parentActivityName="com.liquid.liquidlounge.fragments.NavbarSettings"
                   android:exported="true">

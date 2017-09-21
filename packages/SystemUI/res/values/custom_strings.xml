@@ -139,6 +139,7 @@
 
     <!-- SysUI Tuner -->
     <string name="lockscreen_tuner_activity">Lockscreen shortcuts</string>
+    <string name="systemui_tuner_navbar_title">Stock settings</string>
 
     <!-- Ambient display and lift gesture Tile -->
     <string name="quick_settings_doze_notifications_label">Ambient notifications</string>
