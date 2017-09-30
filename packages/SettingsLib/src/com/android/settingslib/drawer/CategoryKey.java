@@ -43,6 +43,8 @@ public final class CategoryKey {
     public static final String CATEGORY_NOTIFICATIONS =
             "com.android.settings.category.ia.notifications";
 
+	public static final String CATEGORY_LIQUID = "com.android.settings.category.ia.liquid";		
+			
     public static final Map<String, String> KEY_COMPAT_MAP;
 
     static {
