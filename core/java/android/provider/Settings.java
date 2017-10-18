@@ -4454,6 +4454,12 @@ public final class Settings {
         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
 
         /**
+         * Whether to use light or dark style quick settings
+         * @hide
+         */
+        public static final String QS_STYLE_DARK = "qs_style_dark";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4627,6 +4633,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(PROXIMITY_AUTO_SPEAKER);
             PRIVATE_SETTINGS.add(PROXIMITY_AUTO_SPEAKER_DELAY);
             PRIVATE_SETTINGS.add(PROXIMITY_AUTO_SPEAKER_INCALL_ONLY);
+            PRIVATE_SETTINGS.add(QS_STYLE_DARK);
         }
 
         /**
