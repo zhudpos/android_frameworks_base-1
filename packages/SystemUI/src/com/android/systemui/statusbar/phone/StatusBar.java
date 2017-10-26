@@ -5749,18 +5749,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QS_ROWS_PORTRAIT),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QS_ROWS_LANDSCAPE),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QS_COLUMNS_PORTRAIT),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QS_COLUMNS_LANDSCAPE),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.BATTERY_SAVER_MODE_COLOR),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -5795,7 +5783,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             setDoubleTapNavbar();
             setStatusBarWindowViewOptions();
             setLockscreenMediaMetadata();
-            setQsRowsColumns();
             setHeadsUpStoplist();
             setHeadsUpBlacklist();
             setBrightnessSlider();
@@ -5819,12 +5806,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     private void setLockscreenMediaMetadata() {
         mLockscreenMediaMetadata = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_MEDIA_METADATA, 0, UserHandle.USER_CURRENT) == 1;
-    }
-
-    private void setQsRowsColumns() {
-        if (mQSPanel != null) {
-            mQSPanel.updateResources();
-        }
     }
 
     private void setHeadsUpStoplist() {

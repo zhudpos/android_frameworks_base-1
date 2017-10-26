@@ -1,11 +1,7 @@
 package com.android.systemui.qs;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,18 +74,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     public boolean updateResources() {
         final Resources res = mContext.getResources();
-        final ContentResolver resolver = mContext.getContentResolver();
-
-        final int columns;
-        if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            columns = Math.max(1, Settings.System.getIntForUser(resolver,
-                    Settings.System.QS_COLUMNS_PORTRAIT, 5,
-                    UserHandle.USER_CURRENT));
-        } else {
-            columns = Math.max(1, Settings.System.getIntForUser(resolver,
-                    Settings.System.QS_COLUMNS_LANDSCAPE, 5,
-                    UserHandle.USER_CURRENT));
-        }
+        final int columns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
         mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
         mCellMargin = res.getDimensionPixelSize(R.dimen.qs_tile_margin);
         mCellMarginTop = res.getDimensionPixelSize(R.dimen.qs_tile_margin_top);
