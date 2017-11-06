@@ -23,10 +23,8 @@ import android.hardware.SensorManager;
 import android.os.Handler;
 
 import com.android.internal.hardware.AmbientDisplayConfiguration;
-import com.android.systemui.Dependency;
 import com.android.systemui.SystemUIApplication;
 import com.android.systemui.statusbar.phone.DozeParameters;
-import com.android.systemui.util.AsyncSensorManager;
 import com.android.systemui.util.wakelock.WakeLock;
 
 public class DozeFactory {
@@ -37,7 +35,7 @@ public class DozeFactory {
     /** Creates a DozeMachine with its parts for {@code dozeService}. */
     public DozeMachine assembleMachine(DozeService dozeService) {
         Context context = dozeService;
-        SensorManager sensorManager = Dependency.get(AsyncSensorManager.class);
+        SensorManager sensorManager = context.getSystemService(SensorManager.class);
         AlarmManager alarmManager = context.getSystemService(AlarmManager.class);
 
         DozeHost host = getHost(dozeService);
