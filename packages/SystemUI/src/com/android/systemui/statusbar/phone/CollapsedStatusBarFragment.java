@@ -19,7 +19,11 @@ import static com.android.systemui.statusbar.phone.StatusBar.reinflateSignalClus
 import android.annotation.Nullable;
 import android.app.Fragment;
 import android.app.StatusBarManager;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +61,28 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private StatusBar mStatusBarComponent;
     private DarkIconManager mDarkIconManager;
     private SignalClusterView mSignalClusterView;
+	
+	private View mLiquidLogo;
+    private boolean mShowLogo;
+    private final Handler mHandler = new Handler();
+
+    private class LiquidSettingsObserver extends ContentObserver {
+        LiquidSettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_LOGO),
+                    false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings(true);
+        }
+    }
+    private LiquidSettingsObserver mLiquidSettingsObserver = new LiquidSettingsObserver(mHandler);
 
     private SignalCallback mSignalCallback = new SignalCallback() {
         @Override
@@ -71,6 +97,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mKeyguardMonitor = Dependency.get(KeyguardMonitor.class);
         mNetworkController = Dependency.get(NetworkController.class);
         mStatusBarComponent = SysUiServiceProvider.getComponent(getContext(), StatusBar.class);
+		mLiquidSettingsObserver.observe();
     }
 
     @Override
@@ -91,6 +118,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
         mSignalClusterView = mStatusBar.findViewById(R.id.signal_cluster);
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
+		mLiquidLogo = mStatusBar.findViewById(R.id.status_bar_logo);
+		updateSettings(false);
         // Default to showing until we know otherwise.
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
@@ -183,7 +212,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void hideSystemIconArea(boolean animate) {
-        animateHide(mSystemIconArea, animate);
+        animateHide(mSystemIconArea, animate, true);
     }
 
     public void showSystemIconArea(boolean animate) {
@@ -191,21 +220,27 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void hideNotificationIconArea(boolean animate) {
-        animateHide(mNotificationIconAreaInner, animate);
+        animateHide(mNotificationIconAreaInner, animate, true);
+		if (mShowLogo) {
+			animateHide(mLiquidLogo, animate, true);
+		}	
     }
 
     public void showNotificationIconArea(boolean animate) {
         animateShow(mNotificationIconAreaInner, animate);
+		if (mShowLogo) {
+			animateShow(mLiquidLogo, animate);
+		}
     }
 
     /**
      * Hides a view.
      */
-    private void animateHide(final View v, boolean animate) {
+    private void animateHide(final View v, boolean animate, final boolean invisible) {
         v.animate().cancel();
         if (!animate) {
             v.setAlpha(0f);
-            v.setVisibility(View.INVISIBLE);
+            v.setVisibility(invisible ? View.INVISIBLE : View.GONE);
             return;
         }
         v.animate()
@@ -213,7 +248,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                 .setDuration(160)
                 .setStartDelay(0)
                 .setInterpolator(Interpolators.ALPHA_OUT)
-                .withEndAction(() -> v.setVisibility(View.INVISIBLE));
+                .withEndAction(() -> v.setVisibility(invisible ? View.INVISIBLE : View.GONE));
     }
 
     /**
@@ -257,6 +292,21 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         } else if (emergencyViewStub != null) {
             ViewGroup parent = (ViewGroup) emergencyViewStub.getParent();
             parent.removeView(emergencyViewStub);
+        }
+    }
+	
+	public void updateSettings(boolean animate) {
+        mShowLogo = Settings.System.getIntForUser(
+                getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO, 0,
+                UserHandle.USER_CURRENT) == 1;
+        if (mNotificationIconAreaInner != null) {
+            if (mShowLogo) {
+                if (mNotificationIconAreaInner.getVisibility() == View.VISIBLE) {
+                    animateShow(mLiquidLogo, animate);
+                }
+            } else {
+                animateHide(mLiquidLogo, animate, false);
+            }
         }
     }
 }

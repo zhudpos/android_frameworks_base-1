@@ -831,7 +831,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private boolean mLockscreenMediaMetadata;
 
-    // omni additions start
     private StatusBarHeaderMachine mStatusBarHeaderMachine;
 
     @Override
