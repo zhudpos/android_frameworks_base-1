@@ -46,6 +46,11 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.policy.BatteryController;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class BatterySaverTile extends QSTileImpl<BooleanState> implements
         BatteryController.BatteryStateChangeCallback {
 
@@ -57,6 +62,9 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
     private boolean mCharging;
     private boolean mDetailShown;
     private boolean mPluggedIn;
+
+    private boolean mDashCharger;
+    private boolean mHasDashCharger;
 
     public BatterySaverTile(QSHost host) {
         super(host);
@@ -107,12 +115,22 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
+
+        mHasDashCharger = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_hasDashCharger);
+        mDashCharger = mHasDashCharger && isDashCharger();
+
         state.state = mCharging ? Tile.STATE_UNAVAILABLE
                 : mPowerSave ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
         if (mCharging) {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_battery_saver_charging);
             state.label = mContext.getString(R.string.keyguard_plugged_in);
-        } else {
+        }
+        if (mDashCharger) {
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_battery_saver_charging);
+            state.label = mContext.getString(R.string.keyguard_plugged_in_dash_charging);
+        }
+        if (!mDashCharger && !mCharging) {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_battery_saver);
             state.label = mContext.getString(R.string.battery_detail_switch_title);
         }
@@ -282,5 +300,19 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
                 postBindView();
             }
         };
+    }
+
+    private boolean isDashCharger() {
+        try {
+            FileReader file = new FileReader("/sys/class/power_supply/battery/fastchg_status");
+            BufferedReader br = new BufferedReader(file);
+            String state = br.readLine();
+            br.close();
+            file.close();
+            return "1".equals(state);
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+        return false;
     }
 }
