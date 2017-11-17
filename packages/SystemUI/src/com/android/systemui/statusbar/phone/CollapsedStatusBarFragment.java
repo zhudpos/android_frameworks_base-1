@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.LinearLayout;
+import android.util.Slog;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
@@ -296,17 +297,22 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 	
 	public void updateSettings(boolean animate) {
-        mShowLogo = Settings.System.getIntForUser(
+        try {
+            mShowLogo = Settings.System.getIntForUser(
                 getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO, 0,
                 UserHandle.USER_CURRENT) == 1;
-        if (mNotificationIconAreaInner != null) {
-            if (mShowLogo) {
-                if (mNotificationIconAreaInner.getVisibility() == View.VISIBLE) {
-                    animateShow(mLiquidLogo, animate);
+            if (mNotificationIconAreaInner != null) {
+                if (mShowLogo) {
+                    if (mNotificationIconAreaInner.getVisibility() == View.VISIBLE) {
+                        animateShow(mLiquidLogo, animate);
+                    }
+                } else {
+                    animateHide(mLiquidLogo, animate, false);
                 }
-            } else {
-                animateHide(mLiquidLogo, animate, false);
             }
+        } catch (Exception e) {    
+            // never ever crash here
+            Slog.e(TAG, "updateSettings(animate)", e);
         }
     }
 }
