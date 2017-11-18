@@ -118,10 +118,12 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
     @Override
     public void weatherError(int errorReason) {
         if (DEBUG) Log.d(TAG, "weatherError " + errorReason);
-        mWeatherLabel = mContext.getResources().getString(R.string.omnijaws_service_error);
-        refreshState();
-        if (isShowingDetail()) {
-            mDetailedView.weatherError(errorReason);
+        if (errorReason != OmniJawsClient.EXTRA_ERROR_DISABLED) {
+            mWeatherLabel = mContext.getResources().getString(R.string.omnijaws_service_error);
+            refreshState();
+            if (isShowingDetail()) {
+                mDetailedView.weatherError(errorReason);
+            }
         }
     }
 
@@ -136,6 +138,10 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
     @Override
     protected void handleSecondaryClick() {
         if (DEBUG) Log.d(TAG, "handleSecondaryClick");
+        if (!mWeatherClient.isOmniJawsServiceInstalled()) {
+            Toast.makeText(mContext, R.string.omnijaws_package_not_available, Toast.LENGTH_SHORT).show();
+            return;
+        }
         // Secondary clicks are also on quickbar tiles
         showDetail(true);
     }
