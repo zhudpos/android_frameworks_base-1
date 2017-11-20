@@ -4456,6 +4456,12 @@ public final class Settings {
         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
 
         /**
+         * The delay when killing the app on long press takes place
+         * @hide
+         */
+        public static final String LONG_PRESS_KILL_DELAY = "long_press_kill_delay";
+
+        /**
          * Whether to use light or dark style quick settings
          * @hide
          */

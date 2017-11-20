@@ -35,9 +35,6 @@
 	<!-- Whether device has dash charging support -->
     <bool name="config_hasDashCharger">false</bool>
 
-    <!-- Kill app long press back -->
-    <integer name="config_backKillTimeout">1000</integer>
-
     <!-- IME switcher -->
     <bool name="config_show_cmIMESwitcher">false</bool>
 
