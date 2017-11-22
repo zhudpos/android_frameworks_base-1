@@ -4456,6 +4456,12 @@ public final class Settings {
         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
 
         /**
+         * The delay when killing the app on long press takes place
+         * @hide
+         */
+        public static final String LONG_PRESS_KILL_DELAY = "long_press_kill_delay";
+
+        /**
          * Whether to use light or dark style quick settings
          * @hide
          */
@@ -4539,6 +4545,18 @@ public final class Settings {
          * @hide
          */
         public static final String AMBIENT_DOZE_AUTO_BRIGHTNESS = "ambient_doze_auto_brightness";
+
+        /**
+         * Whether to launch default music player when headset plugged in
+         * 0 = don't do anything (default)
+         * 1 = launch only on wired connection
+         * 2 = launch only on bt connection but no carkit
+         * 3 = launch only on bt connection
+         * 4 = launch on both connection types but no carkit
+         * 5 = launch on both connection types
+         * @hide
+         */
+        public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -4724,6 +4742,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUS_BAR_LOGO);
             PRIVATE_SETTINGS.add(AMBIENT_DOZE_CUSTOM_BRIGHTNESS);
             PRIVATE_SETTINGS.add(AMBIENT_DOZE_AUTO_BRIGHTNESS);
+            PRIVATE_SETTINGS.add(HEADSET_CONNECT_PLAYER);
         }
 
         /**

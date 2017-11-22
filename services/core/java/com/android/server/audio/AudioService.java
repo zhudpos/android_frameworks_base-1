@@ -35,6 +35,7 @@ import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothProfile;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -626,6 +627,7 @@ public class AudioService extends IAudioService.Stub
     }
 
     private boolean mLinkNotificationWithVolume;
+    private int mLaunchPlayer;
 
     ///////////////////////////////////////////////////////////////////////////
     // Construction
@@ -649,6 +651,9 @@ public class AudioService extends IAudioService.Stub
 
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         mHasVibrator = vibrator == null ? false : vibrator.hasVibrator();
+
+        mLaunchPlayer = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HEADSET_CONNECT_PLAYER, 4, UserHandle.USER_CURRENT);
 
         // Initialize volume
         int maxVolume = SystemProperties.getInt("ro.config.vc_call_vol_steps",
@@ -3312,6 +3317,24 @@ public class AudioService extends IAudioService.Stub
         synchronized (mScoClients) {
             if (connected) {
                 mBluetoothHeadsetDevice = btDevice;
+                switch (mLaunchPlayer) {
+                    case 0:
+                    case 1:
+                        //do nothing
+                        break;
+                    case 2:
+                    case 4:
+                        //launch the player if bt headset is not a carkit
+                        if (outDevice != AudioSystem.DEVICE_OUT_BLUETOOTH_SCO_CARKIT) {
+                            startMusicPlayer();
+                        }
+                        break;
+                    case 3:
+                    case 5:
+                        //launch the player for all bt headsets
+                        startMusicPlayer();
+                        break;
+                }
             } else {
                 mBluetoothHeadsetDevice = null;
                 resetBluetoothSco();
@@ -5045,6 +5068,8 @@ public class AudioService extends IAudioService.Stub
                     Settings.System.VOLUME_KEYS_CONTROL_MEDIA_STREAM), false, this);
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLUME_LINK_NOTIFICATION), false, this);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADSET_CONNECT_PLAYER), false, this);
         }
 
         @Override
@@ -5076,6 +5101,8 @@ public class AudioService extends IAudioService.Stub
                     mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
                 }
             }
+            mLaunchPlayer = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.HEADSET_CONNECT_PLAYER, 4, UserHandle.USER_CURRENT);
         }
 
         private void updateEncodedSurroundOutput() {
@@ -5451,12 +5478,20 @@ public class AudioService extends IAudioService.Stub
             connType = AudioRoutesInfo.MAIN_HEADSET;
             intent.setAction(Intent.ACTION_HEADSET_PLUG);
             intent.putExtra("microphone", 1);
+            if ((mLaunchPlayer == 1 || mLaunchPlayer == 4 || mLaunchPlayer == 5)
+                    && state ==1) {
+                startMusicPlayer();
+            }
         } else if (device == AudioSystem.DEVICE_OUT_WIRED_HEADPHONE ||
                    device == AudioSystem.DEVICE_OUT_LINE) {
             /*do apps care about line-out vs headphones?*/
             connType = AudioRoutesInfo.MAIN_HEADPHONES;
             intent.setAction(Intent.ACTION_HEADSET_PLUG);
             intent.putExtra("microphone", 0);
+            if ((mLaunchPlayer == 1 || mLaunchPlayer == 4 || mLaunchPlayer == 5)
+                    && state ==1) {
+                startMusicPlayer();
+            }
         } else if (device == AudioSystem.DEVICE_OUT_HDMI ||
                 device == AudioSystem.DEVICE_OUT_HDMI_ARC) {
             connType = AudioRoutesInfo.MAIN_HDMI;
@@ -5493,6 +5528,20 @@ public class AudioService extends IAudioService.Stub
             AudioSystem.DEVICE_OUT_WIRED_HEADSET | AudioSystem.DEVICE_OUT_WIRED_HEADPHONE |
             AudioSystem.DEVICE_OUT_LINE |
             AudioSystem.DEVICE_OUT_ALL_USB;
+
+    private void startMusicPlayer() {
+        TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
+        if (!tm.isInCall()) {
+            try {
+                Intent playerIntent = new Intent(Intent.ACTION_MAIN);
+                playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
+                playerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(playerIntent);
+            } catch (ActivityNotFoundException | IllegalArgumentException e) {
+                Log.w(TAG, "No music player Activity could be found");
+            }
+        }
+    }
 
     private void onSetWiredDeviceConnectionState(int device, int state, String address,
             String deviceName, String caller) {
