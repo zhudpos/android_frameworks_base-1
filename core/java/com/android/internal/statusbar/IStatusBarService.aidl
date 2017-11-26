@@ -17,6 +17,7 @@
 package com.android.internal.statusbar;
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
@@ -78,8 +79,15 @@ interface IStatusBarService
     void clickTile(in ComponentName tile);
     void handleSystemNavigationKey(in int key);
 
-    /**
-     * Liquid Remix
-     */
-    void toggleCameraFlash();
+    // Start DU methods
+    void toggleRecentApps();
+    void toggleSplitScreen();
+    void preloadRecentApps();
+    void cancelPreloadRecentApps();
+    void startAssist(in Bundle args);
+    void screenPinningStateChanged(boolean enabled);
+    void leftInLandscapeChanged(boolean isLeft);
+    void toggleFlashlight();
+    void toggleNavigationEditor();
+    void dispatchNavigationEditorResults(in Intent intent);
 }
