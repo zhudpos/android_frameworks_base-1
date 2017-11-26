@@ -79,6 +79,10 @@ interface IStatusBarService
     void clickTile(in ComponentName tile);
     void handleSystemNavigationKey(in int key);
 
+    /**
+     * Liquid Remix
+     */
+    void toggleCameraFlash();
 
     // Start DU methods
     void toggleRecentApps();
