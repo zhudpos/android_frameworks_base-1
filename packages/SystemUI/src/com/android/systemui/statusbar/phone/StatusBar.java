@@ -864,6 +864,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private NavigationBarFragment mNavigationBar;
     private View mNavigationBarView;
+    private FlashlightController mFlashlightController;
 
     private boolean mLockscreenMediaMetadata;
 

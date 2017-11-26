@@ -79,6 +79,7 @@ interface IStatusBarService
     void clickTile(in ComponentName tile);
     void handleSystemNavigationKey(in int key);
 
+
     // Start DU methods
     void toggleRecentApps();
     void toggleSplitScreen();
