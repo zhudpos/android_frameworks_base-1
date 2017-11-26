@@ -143,6 +143,7 @@ public class CommandQueue extends IStatusBar.Stub {
         default void handleSystemNavigationKey(int arg1) { }
         default void handleShowGlobalActionsMenu() { }
 
+
         default void screenPinningStateChanged(boolean enabled) {}
         default void leftInLandscapeChanged(boolean isLeft) {}
         default void toggleFlashlight() {}
