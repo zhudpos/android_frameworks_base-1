@@ -43,4 +43,8 @@
     <string name="permlab_fakePackageSignature">Spoof package signature</string>
     <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Grant this permission with caution only!</string>
 
+    <!-- DUI -->
+    <string name="permlab_toggleNavigationEditor">control navigation editor</string>
+    <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+
 </resources>
