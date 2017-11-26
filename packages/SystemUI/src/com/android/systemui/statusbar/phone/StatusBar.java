@@ -864,7 +864,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private NavigationBarFragment mNavigationBar;
     private View mNavigationBarView;
-    private FlashlightController mFlashlightController;
 
     private boolean mLockscreenMediaMetadata;
 
@@ -3088,6 +3087,15 @@ public class StatusBar extends SystemUI implements DemoMode,
             }
         }
 
+    }
+    @Override
+    public void toggleCameraFlash() {
+        if (DEBUG) {
+            Log.d(TAG, "Toggling camera flashlight");
+        }
+        if (mFlashlightController.isAvailable()) {
+            mFlashlightController.setFlashlight(!mFlashlightController.isEnabled());
+        }
     }
 
     boolean panelsEnabled() {
